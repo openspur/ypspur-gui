@@ -50,6 +50,8 @@ private:
 
     QString paramFile;
     QString port;
+    QString coordinatorPath;
+    QString interpreterPath;
 
     QSettings settings;
 };

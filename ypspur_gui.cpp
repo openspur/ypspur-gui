@@ -13,6 +13,26 @@ YPSpur_gui::YPSpur_gui(QWidget *parent) :
     settings(QString("ypspur"))
 {
     ui->setupUi(this);
+    Qt::WindowFlags flags = Qt::Window | Qt::WindowMaximizeButtonHint |
+            Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint |
+            Qt::CustomizeWindowHint;
+    setWindowFlags(flags);
+
+#ifdef _WIN32
+    coordinatorPath = settings.value(
+                "coordinator/path",
+                "./ypspur-coordinator").toString();
+    interpreterPath = settings.value(
+                "interpreter/path",
+                "./ypspur-interpreter").toString();
+#else
+    coordinatorPath = settings.value(
+                "coordinator/path",
+                "/usr/local/bin/ypspur-coordinator").toString();
+    interpreterPath = settings.value(
+                "interpreter/path",
+                "/usr/local/bin/ypspur-interpreter").toString();
+#endif
 
     port = settings.value("coordinator/port", "/dev/ttyACM0").toString();
     if(!port.isEmpty()) ui->portList->addItem(port);
@@ -47,7 +67,7 @@ void YPSpur_gui::on_coordinatorStart_toggled(bool checked)
         args.append("--param");
         args.append(paramFile);
         args.append("--update-param");
-        coordinator.start("/usr/local/bin/ypspur-coordinator", args);
+        coordinator.start(coordinatorPath, args);
     }
     else
     {
@@ -79,7 +99,7 @@ void YPSpur_gui::updateCoordinatorError()
     mutexCoordinatorOutput.unlock();
     if(data.contains("Command&nbsp;analyser&nbsp;started."))
     {
-        interpreter.start("/usr/local/bin/ypspur-interpreter");
+        interpreter.start(interpreterPath);
     }
 }
 

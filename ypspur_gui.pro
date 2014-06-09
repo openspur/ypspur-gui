@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ypspur_gui
+TARGET = ypspur-gui
 TEMPLATE = app
 
 
@@ -20,3 +20,5 @@ HEADERS  += \
 
 FORMS += \
     ypspur_gui.ui
+
+CONFIG += static
