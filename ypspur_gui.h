@@ -34,13 +34,17 @@ private slots:
     void updateInterpreterError();
     void updateInterpreterText();
 
+    void interpreterQuit(int exitCode);
+    void coordinatorQuit(int exitCode);
+
     void on_parameterBrowse_clicked();
-
     void on_portList_textChanged(const QString &arg1);
-
     void on_interpreterCommand_returnPressed();
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event);
+
+
     Ui::YPSpur_gui *ui;
 
     QProcess interpreter;
@@ -52,6 +56,8 @@ private:
     QString port;
     QString coordinatorPath;
     QString interpreterPath;
+    QString devicePath;
+    QString deviceName;
 
     QSettings settings;
 };
