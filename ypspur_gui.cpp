@@ -86,8 +86,11 @@ void YPSpur_gui::on_coordinatorStart_toggled(bool checked)
         QStringList args;
         args.append("--device");
         args.append(port);
-        args.append("--param");
-        args.append(paramFile);
+        if(!paramFile.isEmpty())
+        {
+            args.append("--param");
+            args.append(paramFile);
+        }
         args.append("--update-param");
         coordinator.start(coordinatorPath, args);
     }
@@ -224,3 +227,4 @@ bool YPSpur_gui::eventFilter(QObject *obj, QEvent *event)
     }
     return QObject::eventFilter(obj, event);
 }
+
