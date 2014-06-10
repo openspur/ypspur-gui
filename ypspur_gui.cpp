@@ -86,7 +86,7 @@ void YPSpur_gui::on_coordinatorStart_toggled(bool checked)
         QStringList args;
         args.append("--device");
         args.append(port);
-        if(!paramFile.isEmpty())
+        if(!paramFile.isEmpty() && paramFile != "embedded")
         {
             args.append("--param");
             args.append(paramFile);
@@ -179,14 +179,19 @@ void YPSpur_gui::on_parameterBrowse_clicked()
                 QString("Parameter files (*.param)"));
     if(!fileName.isEmpty())
     {
-        paramFile = fileName;
-
-        QString paramName = fileName;
-        paramName.replace(QRegExp("^.*([^/\\\\]*)$"),"\\1");
-        ui->parameterName->setText(paramName);
-
-        settings.setValue("coordinator/param", paramFile);
+        setParamFile(fileName);
     }
+}
+
+void YPSpur_gui::setParamFile(QString fileName)
+{
+    paramFile = fileName;
+
+    QString paramName = fileName;
+    paramName.replace(QRegExp("^.*([^/\\\\]*)$"),"\\1");
+    ui->parameterName->setText(paramName);
+
+    settings.setValue("coordinator/param", paramFile);
 }
 
 void YPSpur_gui::on_portList_textChanged(const QString &arg1)
@@ -218,7 +223,6 @@ bool YPSpur_gui::eventFilter(QObject *obj, QEvent *event)
 
         QFileInfoList list = dir.entryInfoList();
         ui->portList->clear();
-        fprintf(stderr,"test %d\n", list.count());
         for(int i = 0; i < list.count(); i++)
         {
             ui->portList->addItem(list[i].absoluteFilePath());

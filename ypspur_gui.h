@@ -26,6 +26,7 @@ class YPSpur_gui : public QMainWindow
 public:
     explicit YPSpur_gui(QWidget *parent = 0);
     ~YPSpur_gui();
+    void setParamFile(QString param);
 
 private slots:
     void on_coordinatorStart_toggled(bool checked);
