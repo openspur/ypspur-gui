@@ -41,6 +41,11 @@ private slots:
     void on_parameterBrowse_clicked();
     void on_portList_textChanged(const QString &arg1);
     void on_interpreterCommand_returnPressed();
+    void on_coordinatorDefaultParam_clicked();
+    void on_coordinatorPath_textChanged(const QString &arg1);
+    void on_coordinatorOptions_textChanged(const QString &arg1);
+    void on_interpreterPath_textChanged(const QString &arg1);
+    void on_interpreterOptions_textChanged(const QString &arg1);
 
 private:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -57,6 +62,8 @@ private:
     QString port;
     QString coordinatorPath;
     QString interpreterPath;
+    QString coordinatorOptions;
+    QString interpreterOptions;
     QString devicePath;
     QString deviceName;
 

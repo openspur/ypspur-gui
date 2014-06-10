@@ -47,6 +47,14 @@ YPSpur_gui::YPSpur_gui(QWidget *parent) :
     devicePath = settings.value("coordinator/devicePath", "/dev/").toString();
     deviceName = settings.value("coordinator/deviceName", "ttyACM*").toString();
 #endif
+    ui->coordinatorPath->setText(coordinatorPath);
+    ui->interpreterPath->setText(interpreterPath);
+
+    coordinatorOptions = settings.value("coordinator/options", "").toString();
+    interpreterOptions = settings.value("interpreter/options", "").toString();
+    ui->coordinatorOptions->setText(coordinatorOptions);
+    ui->interpreterOptions->setText(interpreterOptions);
+
 
     port = settings.value("coordinator/port", "/dev/ttyACM0").toString();
     if(!port.isEmpty()) ui->portList->addItem(port);
@@ -92,6 +100,9 @@ void YPSpur_gui::on_coordinatorStart_toggled(bool checked)
             args.append(paramFile);
         }
         args.append("--update-param");
+        QStringList options = coordinatorOptions.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        if( !options.isEmpty() ) args.append(options);
+
         coordinator.start(coordinatorPath, args);
     }
     else
@@ -106,7 +117,7 @@ void YPSpur_gui::on_coordinatorStart_toggled(bool checked)
 void YPSpur_gui::coordinatorQuit(int exitCode)
 {
     printTextEdit(ui->coordinatorOut, "<br><i>Exit code: " + QString().number(exitCode) + "</i><br>");
-    ui->coordinatorStart->toggle();
+    ui->coordinatorStart->setChecked(false);
 }
 
 void YPSpur_gui::interpreterQuit(int exitCode)
@@ -128,7 +139,12 @@ void YPSpur_gui::updateCoordinatorError()
         mutexInterpreterOutput.lock();
         printTextEdit(ui->interpreterOut, "<hr style=\"width:100%;background-color:#CCCCCC;height:1pt;\">");
         mutexInterpreterOutput.unlock();
-        interpreter.start(interpreterPath);
+
+        QStringList options = interpreterOptions.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        if(!options.isEmpty())
+            interpreter.start(interpreterPath, options);
+        else
+            interpreter.start(interpreterPath);
     }
 }
 
@@ -232,3 +248,32 @@ bool YPSpur_gui::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
+
+void YPSpur_gui::on_coordinatorDefaultParam_clicked()
+{
+    setParamFile("embedded");
+}
+
+void YPSpur_gui::on_coordinatorPath_textChanged(const QString &arg1)
+{
+    coordinatorPath = arg1;
+    settings.setValue("coordinator/path", arg1);
+}
+
+void YPSpur_gui::on_coordinatorOptions_textChanged(const QString &arg1)
+{
+    coordinatorOptions = arg1;
+    settings.setValue("coordinator/options", arg1);
+}
+
+void YPSpur_gui::on_interpreterPath_textChanged(const QString &arg1)
+{
+    interpreterPath = arg1;
+    settings.setValue("interpreter/path", arg1);
+}
+
+void YPSpur_gui::on_interpreterOptions_textChanged(const QString &arg1)
+{
+    interpreterOptions = arg1;
+    settings.setValue("interpreter/options", arg1);
+}
