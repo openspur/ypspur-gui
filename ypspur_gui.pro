@@ -18,6 +18,8 @@ SOURCES += main.cpp \
 HEADERS  += \
     ypspur_gui.h
 
+win32:LIBS += -lsetupapi
+
 FORMS += \
     ypspur_gui.ui
 

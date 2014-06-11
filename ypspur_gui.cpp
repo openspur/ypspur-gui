@@ -8,6 +8,16 @@
 #include <QDir>
 #include <QEvent>
 
+#ifdef _WIN32
+#define _UNICODE
+#include <windows.h>
+#include <locale.h>
+#include <setupapi.h>
+#include <initguid.h>
+#include <basetyps.h>
+#include <tchar.h>
+#include <ddk/ntddser.h>
+#endif
 
 void printTextEdit(QTextEdit *out, QString str)
 {
@@ -29,6 +39,8 @@ YPSpur_gui::YPSpur_gui(QWidget *parent) :
     setWindowFlags(flags);
 
 #ifdef _WIN32
+	_tsetlocale(LC_ALL, _T(""));
+
     coordinatorPath = settings.value(
                 "coordinator/path",
                 "./ypspur-coordinator").toString();
@@ -214,8 +226,12 @@ void YPSpur_gui::on_portList_textChanged(const QString &arg1)
 {
     if(!arg1.isNull())
     {
-        port = arg1;
-        settings.setValue("coordinator/port", port);
+        QStringList options = arg1.split(" ", QString::SkipEmptyParts);
+        if(options.size() > 0)
+        {
+	        port = options[0];
+	        settings.setValue("coordinator/port", port);
+	    }
     }
 }
 
@@ -232,6 +248,33 @@ bool YPSpur_gui::eventFilter(QObject *obj, QEvent *event)
     if(event->type() == QEvent::MouseButtonPress)
     {
 #ifdef _WIN32
+		HDEVINFO devInfo = SetupDiGetClassDevs(
+			NULL, NULL, NULL, DIGCF_PRESENT | DIGCF_ALLCLASSES);
+		TCHAR name[128];
+		TCHAR className[128];
+		TCHAR com[128];
+		SP_DEVINFO_DATA devData;
+		devData.cbSize = sizeof(SP_DEVINFO_DATA);
+		
+        ui->portList->clear();
+		for(int i = 0; SetupDiEnumDeviceInfo(devInfo, i, &devData); i++)
+		{
+			SetupDiGetDeviceRegistryProperty(
+				devInfo, &devData, SPDRP_CLASS, NULL, (BYTE*)className, sizeof(className), NULL);
+			if(_tcscmp(className, _T("Ports")) != 0) continue;
+
+			SetupDiGetDeviceRegistryProperty(
+				devInfo, &devData, SPDRP_FRIENDLYNAME, NULL, (BYTE*)name, sizeof(name), NULL);
+			HKEY key = SetupDiOpenDevRegKey(devInfo, &devData,  DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_QUERY_VALUE);
+			if(key)
+			{
+				DWORD len = sizeof(com);
+				RegQueryValueEx(key, _T("PortName"), NULL, NULL, (BYTE*)com, &len );
+				QString qname = QString::fromWCharArray(name);
+				qname.replace(QRegExp("\\s*\\(COM[0-9]+\\)\\s*$"),"");
+				ui->portList->addItem("\\\\.\\" + QString::fromWCharArray(com) + " " + qname);
+			}
+		}
 #else
         QDir dir(devicePath, deviceName);
         dir.setFilter(QDir::AllEntries | QDir::System);
@@ -245,6 +288,7 @@ bool YPSpur_gui::eventFilter(QObject *obj, QEvent *event)
         }
 #endif
     }
+    fflush(stderr);
     return QObject::eventFilter(obj, event);
 }
 
