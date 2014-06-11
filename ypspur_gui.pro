@@ -19,8 +19,12 @@ HEADERS  += \
     ypspur_gui.h
 
 win32:LIBS += -lsetupapi
+win32:INCLUDEPATH += /mingw/include/ddk
 
 FORMS += \
     ypspur_gui.ui
 
 CONFIG += static
+
+
+

@@ -16,7 +16,8 @@
 #include <initguid.h>
 #include <basetyps.h>
 #include <tchar.h>
-#include <ddk/ntddser.h>
+#include <ntdef.h>
+#include <ntddser.h>
 #endif
 
 void printTextEdit(QTextEdit *out, QString str)
