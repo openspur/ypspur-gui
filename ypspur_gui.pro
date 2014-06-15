@@ -21,10 +21,19 @@ HEADERS  += \
 win32:LIBS += -lsetupapi
 win32:INCLUDEPATH += /mingw/include/ddk
 
+win32:QMAKE_CXXFLAGS_RELEASE -= -O
+win32:QMAKE_CXXFLAGS_RELEASE -= -O1
+win32:QMAKE_CXXFLAGS_RELEASE -= -O2
+
+win32:QMAKE_CXXFLAGS_RELEASE *= -Os
+
+
 FORMS += \
     ypspur_gui.ui
 
 CONFIG += static
 
 
+INSTALLS += target
+target.path = /usr/local/bin
 
