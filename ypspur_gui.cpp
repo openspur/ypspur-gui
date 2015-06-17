@@ -223,7 +223,11 @@ void YPSpur_gui::setParamFile(QString fileName)
     settings.setValue("coordinator/param", paramFile);
 }
 
+#if QT_VERSION >= 0x050000
+void YPSpur_gui::on_portList_currentTextChanged(const QString &arg1)
+#else
 void YPSpur_gui::on_portList_textChanged(const QString &arg1)
+#endif
 {
     if(!arg1.isNull())
     {

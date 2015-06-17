@@ -39,7 +39,11 @@ private slots:
     void coordinatorQuit(int exitCode);
 
     void on_parameterBrowse_clicked();
+#if QT_VERSION >= 0x050000
+    void on_portList_currentTextChanged(const QString &arg1);
+#else
     void on_portList_textChanged(const QString &arg1);
+#endif
     void on_interpreterCommand_returnPressed();
     void on_coordinatorDefaultParam_clicked();
     void on_coordinatorPath_textChanged(const QString &arg1);
