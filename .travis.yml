@@ -7,7 +7,7 @@ compiler: gcc
 before_install:
   - sudo apt-get update -y
   - sudo apt-get install -y gcc-mingw-w64-i686 g++-mingw-w64-i686
-  - sudo bash -c "cd /tmp && wget https://github.com/at-wat/qt/releases/download/v4.8.7-w32min/qt4.ubuntu-trusty.mingw32.tar.gz && cd / && tar xzf /tmp/qt4.ubuntu-trusty.mingw32.tar.gz"
+  - sudo bash -c "cd /tmp && wget https://github.com/at-wat/qt/releases/download/v4.8-w32min/qt4.ubuntu-trusty.mingw32.tar.gz && cd / && tar xzf /tmp/qt4.ubuntu-trusty.mingw32.tar.gz"
 script:
   - mkdir build-win32 && cd build-win32 && /usr/local/mingw32/bin/qmake ../ypspur_gui.pro && make release LFLAGS="-static -mwindows"
   - cd ../
