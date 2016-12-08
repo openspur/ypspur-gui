@@ -11,7 +11,7 @@ before_install:
 script:
   - mkdir build-win32 && cd build-win32 && /usr/local/mingw32/bin/qmake ../ypspur_gui.pro && make release LFLAGS="-static -mwindows"
   - cd ../
-  - mkdir install-win32 && mkdir install-win32/bin && cp ./build-win32/ypspur-gui.exe ./install-win32/bin/
+  - mkdir install-win32 && mkdir install-win32/bin && cp ./build-win32/release/ypspur-gui.exe ./install-win32/bin/
 before_deploy:
   - export GIT_TAG=`git describe --abbrev=0 --tags`
   - mkdir packages
