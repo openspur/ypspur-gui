@@ -1,0 +1,30 @@
+dist: trusty
+sudo: required
+
+language: c
+compiler: gcc
+
+before_install:
+  - sudo apt-get update -y
+  - sudo apt-get install -y gcc-mingw-w64-i686 g++-mingw-w64-i686
+  - sudo bash -c "cd /tmp && wget https://github.com/at-wat/qt/releases/download/v4.8-win32static/qt4.ubuntu-trusty.mingw32.tar.gz && cd / && tar xzf /tmp/qt4.ubuntu-trusty.mingw32.tar.gz"
+script:
+  - mkdir build-win32 && cd build-win32 && /usr/local/mingw32/bin/qmake ../ypspur_gui.pro && make release LFLAGS="-static -mwindows"
+  - cd ../
+  - mkdir install-win32 && mkdir install-win32/bin && cp ./build-win32/release/ypspur-gui.exe ./install-win32/bin/
+before_deploy:
+  - export GIT_TAG=`git describe --abbrev=0 --tags`
+  - mkdir packages
+  - cd install-win32/ && zip -q ../packages/ypspur-gui.win32.$GIT_TAG.zip -r $(ls)
+  - cd ../
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "V7W5bnWUlZN7hznTQryYsqYQ3IezppMdJI6R37aNOAVVr6Z8qpF6wMILFPmATLvwxSxD8tVfp3kO5+zKjJ5PayFXkRszGfep7e/AhA+lGdpWPwNKNCuQ0xI8vCn6r++PvmlTYwqkYuSq2PHKpeO7L/TuuyyknFZSEdy3bfnvbXYGDN28TTF1gCH7HguiSi3NzR9XY+ssZozF5wC1PyyNIwOqBN2y8lLBbQAGuaw40JF95iC8V7LjX5N5u90xKdxwdCW0FM3rpbwbVkk9JQzlMYGCH8A/dffZlPrxroTmSZfSNNsiOgNRmCedzSvDoC25bD9zRHXJqWx8CPjLDdYcUdXwraQyJs6o8OqkGypanB5Xk/LWz/Y2k3Qa3F3odUHrEtNMxo7oMFd2WhGwCXj4nf6aa8bTB1dPMCIYsx52oPDGJMS2PseS9sbWU0YE+Dtj9tYsqZSufG4Tp2j/RO7hIMooDoR77XENOuIw/OzVcjQ/LCgE0rOGS2UQLa88x2Q1ezg7aaeusaMdx4Cnoe86LjoppLWIlq6xhChS+cH+ues96R6FJ8nialCJe94i4pAfaRcxes7t3oM1TZVA61V6RNIlylxROJO0euaI4Xx/OH8f0mDHl0YrGT1NmDPdF3N+mUxutL0ld1GsewbRdy/yZa/N6YvY4BZ/zrNTXKaqxIc="
+  file:
+    - packages/ypspur-gui.win32.$GIT_TAG.zip
+  on:
+    tags: true
+
