@@ -4,36 +4,37 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+lessThan(QT_MAJOR_VERSION, 5) {
+  error("ypspur-gui requires QT>=5")
+}
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui widgets
 
 TARGET = ypspur-gui
 TEMPLATE = app
 
-
-SOURCES += main.cpp \
-    ypspur_gui.cpp
-
+SOURCES += \
+  main.cpp \
+  ypspur_gui.cpp
 HEADERS  += \
-    ypspur_gui.h
+  ypspur_gui.h
+FORMS += \
+  ypspur_gui.ui
 
-win32:LIBS += -lsetupapi
-win32:INCLUDEPATH += /mingw/include/ddk
-
-win32:QMAKE_CXXFLAGS_RELEASE -= -O
-win32:QMAKE_CXXFLAGS_RELEASE -= -O1
-win32:QMAKE_CXXFLAGS_RELEASE -= -O2
+win32:QTPLUGIN.platforms = qwindows
+win32:LIBS += \
+  -lsetupapi \
+  -lqwindows \
+  -ldwmapi \
+  -lQt5EventDispatcherSupport \
+  -lQt5FontDatabaseSupport \
+  -lQt5ThemeSupport \
+  -lQt5VulkanSupport \
+  -lQt5WindowsUIAutomationSupport
 
 win32:QMAKE_CXXFLAGS_RELEASE *= -Os
 
-
-FORMS += \
-    ypspur_gui.ui
-
-CONFIG += static
-
+win32:CONFIG += static
 
 INSTALLS += target
 target.path = /usr/local/bin
-
