@@ -238,6 +238,13 @@ void YPSpurGUI::on_interpreterCommand_returnPressed()
   str.append("\n");
   interpreter_.write(str.toLocal8Bit());
   ui_->interpreterCommand->setText("");
+
+  QString data = str;
+  mutex_interpreter_output_.lock();
+  data.replace(QRegExp(" "), "&nbsp;");
+  data.replace(QRegExp("\n"), "<br>");
+  printTextEdit(ui_->interpreterOut, data);
+  mutex_interpreter_output_.unlock();
 }
 
 bool YPSpurGUI::eventFilter(QObject* obj, QEvent* event)
