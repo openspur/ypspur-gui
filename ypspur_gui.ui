@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>YPSpur_gui</class>
- <widget class="QMainWindow" name="YPSpur_gui">
+ <class>YPSpurGUI</class>
+ <widget class="QMainWindow" name="YPSpurGUI">
   <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
