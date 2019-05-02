@@ -4,9 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+lessThan(QT_MAJOR_VERSION, 5) {
+  error("ypspur-gui requires QT>=5")
+}
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets
 
 TARGET = ypspur-gui
 TEMPLATE = app
