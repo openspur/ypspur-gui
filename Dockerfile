@@ -22,3 +22,5 @@ RUN cd build-win32 \
   && make release LFLAGS="-static -mwindows" \
   && cp ./release/ypspur-gui.exe ../install-win32/bin/ \
   && make clean
+
+RUN mingw-objdump -p install-win32/bin/ypspur-gui.exe | grep dll
