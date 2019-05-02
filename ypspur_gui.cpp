@@ -44,13 +44,13 @@ YPSpurGUI::YPSpurGUI(QWidget* parent)
 
   coordinator_path_ = settings_.value("coordinator/path", "./ypspur-coordinator").toString();
   interpreter_path_ = settings_.value("interpreter/path", "./ypspur-interpreter").toString();
-  device_path_ = settings_.value("coordinator/device_path", "").toString();
-  device_name_ = settings_.value("coordinator/device_name", "").toString();
+  device_path_ = settings_.value("coordinator/devicePath", "").toString();
+  device_name_ = settings_.value("coordinator/deviceName", "").toString();
 #else
   coordinator_path_ = settings_.value("coordinator/path", "/usr/local/bin/ypspur-coordinator").toString();
   interpreter_path_ = settings_.value("interpreter/path", "/usr/local/bin/ypspur-interpreter").toString();
-  device_path_ = settings_.value("coordinator/device_path", "/dev/").toString();
-  device_name_ = settings_.value("coordinator/device_name", "ttyACM*").toString();
+  device_path_ = settings_.value("coordinator/devicePath", "/dev/").toString();
+  device_name_ = settings_.value("coordinator/deviceName", "ttyACM*").toString();
 #endif
   ui_->coordinatorPath->setText(coordinator_path_);
   ui_->interpreterPath->setText(interpreter_path_);
