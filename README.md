@@ -9,7 +9,7 @@ $ git clone https://github.com/at-wat/ypspur-gui.git
 $ cd ypspur-gui
 $ mkdir build
 $ cd build
-$ qmake-qt4 ../ypspur-gui.pro
+$ qmake ../ypspur-gui.pro
 $ make
 # make install
 ```
